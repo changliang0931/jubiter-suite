@@ -109,6 +109,15 @@ export const setDbError = (payload: AppState['suite']['dbError']) => ({
     payload,
 });
 
+export const setInitConnectError = (payload: AppState['suite']['error']) => ({
+    type: SUITE.SET_DB_ERROR,
+    payload,
+});
+
+export const onConnectInitialized = (): SuiteAction => ({
+    type: SUITE.CONNECT_INITIALIZED,
+});
+
 export const setTheme = (
     variant: AppState['suite']['settings']['theme']['variant'],
 ): SuiteAction => ({

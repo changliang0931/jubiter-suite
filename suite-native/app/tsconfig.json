@@ -2,12 +2,14 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": { "outDir": "libDev" },
     "references": [
+        {
+            "path": "../../suite-common/connect-init"
+        },
         { "path": "../atoms" },
         { "path": "../module-home" },
         { "path": "../module-settings" },
         { "path": "../navigation" },
         { "path": "../state" },
-        { "path": "../../packages/connect" },
         { "path": "../../packages/styles" },
         { "path": "../../packages/theme" },
         {
