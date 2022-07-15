@@ -16,6 +16,7 @@ import suiteMiddleware from '@suite-middlewares/suiteMiddleware';
 import buttonRequestMiddleware from '@suite-middlewares/buttonRequestMiddleware';
 
 import { Action } from '@suite-types';
+import { discardMockedConnectInitActions } from '@suite-utils/storage';
 
 const { getSuiteDevice } = global.JestMocks;
 
@@ -105,9 +106,12 @@ describe('buttonRequest middleware', () => {
 
         await call;
 
+        const expectedActions = discardMockedConnectInitActions(store.getActions());
+
         // not interested in the last action (its from changePin mock);
-        store.getActions().pop();
-        expect(store.getActions()).toMatchObject([
+        expectedActions.pop();
+
+        expect(expectedActions).toMatchObject([
             { type: SUITE.CONNECT_INITIALIZED },
             { type: 'mocked' }, // we don't care about this one, it is from middleware flow
             { type: SUITE.LOCK_DEVICE, payload: true },

@@ -110,8 +110,8 @@ export const setDbError = (payload: AppState['suite']['dbError']) => ({
 });
 
 export const setInitConnectError = (payload: AppState['suite']['error']) => ({
-    type: SUITE.SET_DB_ERROR,
-    payload,
+    type: SUITE.ERROR,
+    error: payload,
 });
 
 export const onConnectInitialized = (): SuiteAction => ({

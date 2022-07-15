@@ -16,6 +16,8 @@ type SuiteCompatibleAction<TPayload = void> = (
     payload: TPayload,
 ) => AnyAction | ActionCreatorWithPayload<TPayload> | ActionCreatorWithoutPayload;
 
+export const CONNECT_INIT_ACTION_TYPE = '@suite-common/connect-init/init';
+
 export const prepareConnectInit = createAsyncThunk<
     void,
     {
@@ -34,7 +36,7 @@ export const prepareConnectInit = createAsyncThunk<
         state: any;
     }
 >(
-    '@suite-common/connect-init/init',
+    CONNECT_INIT_ACTION_TYPE,
     async ({ actions, selectors, initSettings }, { dispatch, getState }) => {
         const { selectEnabledNetworks, selectIsPendingTransportEvent } = selectors;
         const { lockDevice, setInitConnectError, onConnectInitialized } = actions;

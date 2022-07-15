@@ -16,6 +16,7 @@ import { SUITE } from '../constants';
 import * as suiteActions from '../suiteActions';
 import { init } from '../trezorConnectActions';
 import fixtures from '../__fixtures__/suiteActions';
+import { discardMockedConnectInitActions } from '@suite-utils/storage';
 
 const { getSuiteDevice } = global.JestMocks;
 
@@ -218,10 +219,11 @@ describe('Suite Actions', () => {
             const store = initStore(state);
             store.dispatch(init()); // trezorConnectActions.init needs to be called in order to wrap "getFeatures" with lockUi action
             await store.dispatch(suiteActions.acquireDevice(f.requestedDevice));
+            const expectedActions = discardMockedConnectInitActions(store.getActions());
             if (!f.result) {
-                expect(store.getActions().length).toEqual(0);
+                expect(expectedActions.length).toEqual(0);
             } else {
-                const action = store.getActions().pop();
+                const action = expectedActions.pop();
                 expect(action.type).toEqual(f.result);
             }
         });

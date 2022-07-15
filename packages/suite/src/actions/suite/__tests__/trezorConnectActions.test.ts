@@ -7,6 +7,7 @@ import suiteReducer from '@suite-reducers/suiteReducer';
 import deviceReducer from '@suite-reducers/deviceReducer';
 import { SUITE } from '@suite-actions/constants';
 import { init } from '../trezorConnectActions';
+import { discardMockedConnectInitActions } from '@suite-utils/storage';
 
 jest.mock('@trezor/connect', () => {
     let fixture: any;
@@ -82,7 +83,8 @@ describe('TrezorConnect Actions', () => {
         const state = getInitialState();
         const store = initStore(state);
         await store.dispatch(init());
-        const action = store.getActions().pop();
+        const actions = discardMockedConnectInitActions(store.getActions());
+        const action = actions.pop();
         expect(action.type).toEqual(SUITE.CONNECT_INITIALIZED);
     });
 
@@ -92,7 +94,8 @@ describe('TrezorConnect Actions', () => {
         const store = initStore(state);
         await store.dispatch(init());
         require('@trezor/connect').setTestFixtures(undefined);
-        const action = store.getActions().pop();
+        const actions = discardMockedConnectInitActions(store.getActions());
+        const action = actions.pop();
         expect(action).toEqual({
             type: SUITE.ERROR,
             error: 'Iframe error',
@@ -108,7 +111,8 @@ describe('TrezorConnect Actions', () => {
         const store = initStore(state);
         await store.dispatch(init());
         require('@trezor/connect').setTestFixtures(undefined);
-        const action = store.getActions().pop();
+        const actions = discardMockedConnectInitActions(store.getActions());
+        const action = actions.pop();
         expect(action).toEqual({
             type: SUITE.ERROR,
             error: 'SomeCode: Iframe error',
@@ -121,7 +125,8 @@ describe('TrezorConnect Actions', () => {
         const store = initStore(state);
         await store.dispatch(init());
         require('@trezor/connect').setTestFixtures(undefined);
-        const action = store.getActions().pop();
+        const actions = discardMockedConnectInitActions(store.getActions());
+        const action = actions.pop();
         expect(action).toEqual({
             type: SUITE.ERROR,
             error: 'Iframe error',
@@ -134,19 +139,19 @@ describe('TrezorConnect Actions', () => {
         const state = getInitialState();
         const store = initStore(state);
         await store.dispatch(init());
-        const actions = store.getActions();
+        const actions = discardMockedConnectInitActions(store.getActions());
         expect(actions.pop().type).toEqual(SUITE.CONNECT_INITIALIZED);
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { emit } = require('@trezor/connect');
 
         emit(DEVICE_EVENT, { type: DEVICE_EVENT });
-        expect(actions.pop()).toEqual({ type: DEVICE_EVENT });
+        expect(store.getActions().pop()).toEqual({ type: DEVICE_EVENT });
         emit(UI_EVENT, { type: UI_EVENT });
-        expect(actions.pop()).toEqual({ type: UI_EVENT });
+        expect(store.getActions().pop()).toEqual({ type: UI_EVENT });
         emit(TRANSPORT_EVENT, { type: TRANSPORT_EVENT });
-        expect(actions.pop()).toEqual({ type: TRANSPORT_EVENT });
+        expect(store.getActions().pop()).toEqual({ type: TRANSPORT_EVENT });
         emit(BLOCKCHAIN_EVENT, { type: BLOCKCHAIN_EVENT });
-        expect(actions.pop()).toEqual({ type: BLOCKCHAIN_EVENT });
+        expect(store.getActions().pop()).toEqual({ type: BLOCKCHAIN_EVENT });
 
         process.env.SUITE_TYPE = defaultSuiteType;
     });

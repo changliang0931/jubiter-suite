@@ -9,6 +9,7 @@ import { init } from '@suite-actions/trezorConnectActions';
 import { SUITE } from '@suite-actions/constants';
 import { BACKUP } from '@backup-actions/constants';
 import * as backupActions from '@backup-actions/backupActions';
+import { discardMockedConnectInitActions } from '@suite-utils/storage';
 
 jest.mock('@trezor/connect', () => {
     let fixture: any;
@@ -80,16 +81,18 @@ describe('Backup Actions', () => {
         await store.dispatch(init());
 
         await store.dispatch(backupActions.backupDevice({ device: store.getState().suite.device }));
-        // discard @suite/trezor-connect-initialized action we don't care about it in this test
-        store.getActions().shift();
 
-        expect(store.getActions().shift()).toEqual({
+        const expectedActions = discardMockedConnectInitActions(store.getActions());
+        // discard @suite/trezor-connect-initialized action we don't care about it in this test
+        expectedActions.shift();
+
+        expect(expectedActions.shift()).toEqual({
             type: BACKUP.SET_STATUS,
             payload: 'in-progress',
         });
-        expect(store.getActions().shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: true });
-        expect(store.getActions().shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: false });
-        expect(store.getActions().shift()).toMatchObject({
+        expect(expectedActions.shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: true });
+        expect(expectedActions.shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: false });
+        expect(expectedActions.shift()).toMatchObject({
             type: '@notification/toast',
             payload: { type: 'backup-success' },
         });
@@ -106,16 +109,25 @@ describe('Backup Actions', () => {
         await store.dispatch(init());
 
         await store.dispatch(backupActions.backupDevice({ device: store.getState().suite.device }));
-        // discard @suite/trezor-connect-initialized action we don't care about it in this test
-        store.getActions().shift();
 
-        expect(store.getActions().shift()).toEqual({
+        const expectedActions = discardMockedConnectInitActions(store.getActions());
+
+        // discard @suite/trezor-connect-initialized action we don't care about it in this test
+        expectedActions.shift();
+
+        expect(expectedActions.shift()).toEqual({
             type: BACKUP.SET_STATUS,
             payload: 'in-progress',
         });
-        expect(store.getActions().shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: true });
-        expect(store.getActions().shift()).toEqual({ type: SUITE.LOCK_DEVICE, payload: false });
-        expect(store.getActions().shift()).toMatchObject({
+        expect(expectedActions.shift()).toEqual({
+            type: SUITE.LOCK_DEVICE,
+            payload: true,
+        });
+        expect(expectedActions.shift()).toEqual({
+            type: SUITE.LOCK_DEVICE,
+            payload: false,
+        });
+        expect(expectedActions.shift()).toMatchObject({
             type: '@notification/toast',
             payload: { type: 'backup-failed' },
         });
