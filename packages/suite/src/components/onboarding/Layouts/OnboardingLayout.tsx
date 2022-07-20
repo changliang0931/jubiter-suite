@@ -5,13 +5,14 @@ import { TrezorLogo, Button, variables } from '@trezor/components';
 import { TREZOR_SUPPORT_URL } from '@trezor/urls';
 import { TrezorLink, Translation } from '@suite-components';
 import { ProgressBar } from '@onboarding-components';
-import { useOnboarding } from '@suite-hooks';
+import { useDevice, useOnboarding } from '@suite-hooks';
 import { MAX_WIDTH } from '@suite-constants/layout';
 import steps from '@onboarding-config/steps';
 import { GuideButton, GuidePanel } from '@guide-components';
 import { useMessageSystem } from '@suite-hooks/useMessageSystem';
 import MessageSystemBanner from '@suite-components/Banners/MessageSystemBanner';
 import { ModalContextProvider } from '@suite-support/ModalContext';
+import { isBitcoinOnly } from '@suite-utils/device';
 
 const Wrapper = styled.div`
     display: flex;
@@ -99,36 +100,38 @@ const Content = styled.div`
     padding-bottom: 48px;
 `;
 
+let progressBarSteps = [
+    {
+        key: 'fw',
+        label: <Translation id="TR_ONBOARDING_STEP_FIRMWARE" />,
+    },
+    {
+        key: 'wallet',
+        label: <Translation id="TR_ONBOARDING_STEP_WALLET" />,
+    },
+    {
+        key: 'pin',
+        label: <Translation id="TR_ONBOARDING_STEP_PIN" />,
+    },
+    {
+        key: 'coins',
+        label: <Translation id="TR_ONBOARDING_STEP_COINS" />,
+    },
+    {
+        key: 'final',
+    },
+];
+
 export const OnboardingLayout: React.FC = ({ children }) => {
+    const { device } = useDevice();
     const { banner } = useMessageSystem();
     const { activeStepId } = useOnboarding();
 
     const activeStep = useMemo(() => steps.find(step => step.id === activeStepId)!, [activeStepId]);
 
-    const progressBarSteps = useMemo(
-        () => [
-            {
-                key: 'fw',
-                label: <Translation id="TR_ONBOARDING_STEP_FIRMWARE" />,
-            },
-            {
-                key: 'wallet',
-                label: <Translation id="TR_ONBOARDING_STEP_WALLET" />,
-            },
-            {
-                key: 'pin',
-                label: <Translation id="TR_ONBOARDING_STEP_PIN" />,
-            },
-            {
-                key: 'coins',
-                label: <Translation id="TR_ONBOARDING_STEP_COINS" />,
-            },
-            {
-                key: 'final',
-            },
-        ],
-        [],
-    );
+    if (device && isBitcoinOnly(device)) {
+        progressBarSteps = progressBarSteps.filter(step => step.key !== 'coins');
+    }
 
     return (
         <Wrapper>

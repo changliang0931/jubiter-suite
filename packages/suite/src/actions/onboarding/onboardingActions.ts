@@ -5,6 +5,7 @@ import * as STEP from '@onboarding-constants/steps';
 import { AnyStepId, AnyPath } from '@onboarding-types';
 import steps from '@onboarding-config/steps';
 import { findNextStep, findPrevStep, isStepInPath } from '@onboarding-utils/steps';
+import { isBitcoinOnly } from '@suite-utils/device';
 
 import { GetState, Dispatch } from '@suite-types';
 
@@ -61,8 +62,15 @@ const goToNextStep = (stepId?: AnyStepId) => (dispatch: Dispatch, getState: GetS
     if (stepId) {
         return dispatch(goToStep(stepId));
     }
+    const { device } = getState().suite;
     const { activeStepId, path } = getState().onboarding;
-    const stepsInPath = steps.filter(step => isStepInPath(step, path));
+    const stepsInPath = steps.filter(step => {
+        // skip Coins step if Bitcoin-only firmware is installed
+        if (step.id === STEP.ID_COINS_STEP && device && isBitcoinOnly(device)) {
+            return false;
+        }
+        return isStepInPath(step, path);
+    });
     const nextStep = findNextStep(activeStepId, stepsInPath);
     dispatch(goToStep(nextStep.id));
 };
