@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { SettingsLayout } from '@settings-components';
 import { CoinsGroup, Translation } from '@suite-components';
-import { SettingsSection, SectionItem, DeviceBanner } from '@suite-components/Settings';
+import { SettingsSection, SectionItem } from '@suite-components/Settings';
 import { useEnabledNetworks } from '@settings-hooks/useEnabledNetworks';
 import { useAnchor } from '@suite-hooks/useAnchor';
-import { useDevice } from '@suite-hooks';
 import { SettingsAnchor } from '@suite-constants/anchors';
+import { FirmwareTypeSuggestion } from './FirmwareTypeSuggestion';
 
 const StyledSettingsLayout = styled(SettingsLayout)`
     & > * + * {
@@ -23,18 +24,9 @@ export const SettingsCoins = () => {
     const { anchorRef: anchorRefTestnetCrypto, shouldHighlight: shouldHighlightTestnetCrypto } =
         useAnchor(SettingsAnchor.TestnetCrypto);
 
-    const { device } = useDevice();
-
     return (
         <StyledSettingsLayout>
-            {device?.connected === false && (
-                <DeviceBanner
-                    title={
-                        <Translation id="TR_SETTINGS_COINS_BANNER_DESCRIPTION_REMEMBERED_DISCONNECTED" />
-                    }
-                />
-            )}
-
+            <FirmwareTypeSuggestion />
             <SettingsSection title={<Translation id="TR_COINS" />} icon="COIN">
                 <SectionItem ref={anchorRefCrypto} shouldHighlight={shouldHighlightCrypto}>
                     <CoinsGroup

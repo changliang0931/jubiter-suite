@@ -2778,6 +2778,15 @@ export default defineMessages({
             'Reconnect the device without touching the screen to access all other Settings.',
         id: 'TR_SETTINGS_DEVICE_BANNER_DESCRIPTION_BOOTLOADER_MODEL_2',
     },
+    TR_SETTINGS_COINS_UNIVERSAL_FIRMWARE_SUGGESTION: {
+        defaultMessage: 'For more coins, install <button>Universal</button> firmware.',
+        id: 'TR_SETTINGS_COINS_UNIVERSAL_FIRMWARE_SUGGESTION',
+    },
+    TR_SETTINGS_COINS_BITCOIN_FIRMWARE_SUGGESTION: {
+        defaultMessage:
+            'If you only need Bitcoin wallet operations, you can install <button>Bitcoin-only</button> firmware.',
+        id: 'TR_SETTINGS_COINS_BITCOIN_FIRMWARE_SUGGESTION',
+    },
     TR_SHOW_ADDRESS_ANYWAY: {
         defaultMessage: 'Show address anyway',
         id: 'TR_SHOW_ADDRESS_ANYWAY',
