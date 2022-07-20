@@ -17,6 +17,7 @@ export const enum SettingsAnchor {
     BackupRecoverySeed = '@device-settings/backup-recovery-seed',
     CheckRecoverySeed = '@device-settings/check-recovery-seed',
     FirmwareVersion = '@device-settings/firmware-version',
+    FirmwareType = '@device-settings/firmware-type',
     PinProtection = '@device-settings/pin-protection',
     ChangePin = '@device-settings/change-pin',
     Passphrase = '@device-settings/passphrase',
