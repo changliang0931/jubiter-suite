@@ -145,3 +145,12 @@ export enum TorStatus {
     Disabling = 'Disabling',
     Enabled = 'Enabled',
 }
+
+export enum FirmwareType {
+    BitcoinOnly = 'Bitcoin-only',
+    Universal = 'Universal',
+}
+
+export enum ModalVariant {
+    SwitchFirmwareType = 'switchFirmwareType',
+}

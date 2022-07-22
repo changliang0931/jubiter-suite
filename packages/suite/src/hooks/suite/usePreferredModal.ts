@@ -1,6 +1,7 @@
 import { MODAL } from '@suite-actions/constants';
 import { useSelector, useDiscovery } from '@suite-hooks';
 import type { Route, ForegroundAppRoute } from '@suite-types';
+import { ModalAppParams } from '@suite-utils/router';
 
 const isForegroundApp = (route: Route): route is ForegroundAppRoute =>
     !route.isFullscreenApp && !!route.isForegroundApp;
@@ -26,7 +27,7 @@ export const usePreferredModal = () => {
     const { getDiscoveryStatus } = useDiscovery();
     const { route, params, modal } = useSelector(state => ({
         route: state.router.route,
-        params: state.router.params,
+        params: state.router.params as ModalAppParams,
         modal: state.modal,
     }));
 
@@ -35,7 +36,8 @@ export const usePreferredModal = () => {
             type: 'foreground-app',
             payload: {
                 app: route.app,
-                cancelable: !!(params as any)?.cancelable,
+                cancelable: !!params.cancelable,
+                variant: params.variant,
             },
         } as const;
     }
@@ -61,7 +63,8 @@ export const usePreferredModal = () => {
             type: 'foreground-app',
             payload: {
                 app: route.app,
-                cancelable: !!(params as any)?.cancelable,
+                cancelable: !!params.cancelable,
+                variant: params.variant,
             },
         } as const;
     }
