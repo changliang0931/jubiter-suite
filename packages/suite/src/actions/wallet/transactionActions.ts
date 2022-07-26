@@ -1,6 +1,7 @@
 import TrezorConnect, { AccountTransaction } from '@trezor/connect';
 import { saveAs } from 'file-saver';
 import { formatNetworkAmount } from '@wallet-utils/accountUtils';
+import { isStandardBackendType } from '@suite-utils/backend';
 import {
     enhanceTransaction,
     findTransactions,
@@ -131,6 +132,7 @@ export const replaceTransaction =
 export const fetchTransactions =
     (account: Account, page: number, perPage: number, noLoading = false, recursive = false) =>
     async (dispatch: Dispatch, getState: GetState) => {
+        if (!isStandardBackendType(account.backendType)) return; // do not auto-fetch transactions for account with non-standard backend behaviour
         const { transactions } = getState().wallet.transactions;
         const reducerTxs = getAccountTransactions(account.key, transactions);
 

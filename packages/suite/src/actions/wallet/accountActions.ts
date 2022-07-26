@@ -5,6 +5,7 @@ import * as notificationActions from '@suite-actions/notificationActions';
 import * as transactionActions from '@wallet-actions/transactionActions';
 import * as tokenActions from '@wallet-actions/tokenActions';
 import * as accountUtils from '@wallet-utils/accountUtils';
+import { isStandardBackendType } from '@suite-utils/backend';
 import {
     analyzeTransactions,
     getAccountTransactions,
@@ -131,6 +132,7 @@ export const changeAccountVisibility = (payload: Account, visible = true): Accou
 // as we usually want to update all accounts for a single coin at once
 export const fetchAndUpdateAccount =
     (account: Account) => async (dispatch: Dispatch, getState: GetState) => {
+        if (!isStandardBackendType(account.backendType)) return; // use non-standard backend behaviour
         // first basic check, traffic optimization
         // basic check returns only small amount of data without full transaction history
         const basic = await TrezorConnect.getAccountInfo({

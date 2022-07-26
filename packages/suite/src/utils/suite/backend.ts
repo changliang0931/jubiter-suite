@@ -1,3 +1,4 @@
+import { TREZOR_CONNECT_BACKENDS, BackendType } from '@suite-common/wallet-config';
 import type { Network, CustomBackend } from '@wallet-types';
 import type { BlockchainState, BackendSettings } from '@wallet-reducers/blockchainReducer';
 
@@ -35,3 +36,9 @@ export const getCustomBackends = (blockchains: BlockchainState): CustomBackend[]
 const electrumUrlRegex = /^([a-zA-Z0-9.-]+):[0-9]{1,5}:[ts]$/; // URL is in format host:port:[t|s] (t for tcp, s for ssl)
 
 export const isElectrumUrl = (value: string) => electrumUrlRegex.test(value);
+
+// validate if account.backendType or NETWORK.customBackends are supported by TrezorConnect
+export const isStandardBackendType = (type?: BackendType) => {
+    if (!type) return true; // use TrezorConnect by default
+    return !!TREZOR_CONNECT_BACKENDS.find(b => b === type);
+};

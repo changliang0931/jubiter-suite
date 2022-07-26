@@ -17,4 +17,15 @@ describe('backend utils', () => {
         expect(utils.isElectrumUrl('https://google.com')).toBe(false);
         expect(utils.isElectrumUrl('')).toBe(false);
     });
+
+    test('isStandardBackendType', () => {
+        const { isStandardBackendType } = utils;
+        expect(isStandardBackendType()).toBe(true);
+        expect(isStandardBackendType('blockbook')).toBe(true);
+        expect(isStandardBackendType('coinjoin')).toBe(false);
+        // @ts-expect-error
+        expect(isStandardBackendType('gibberish')).toBe(false);
+        // @ts-expect-error
+        expect(isStandardBackendType({})).toBe(false);
+    });
 });
