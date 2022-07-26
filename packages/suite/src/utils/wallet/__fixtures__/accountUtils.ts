@@ -163,6 +163,11 @@ export const getBip43Type = [
         result: 'bip44',
     },
     {
+        description: 'bitcoin coinjoin',
+        path: "m/10025'/0'/0'",
+        result: 'coinjoin',
+    },
+    {
         description: 'litecoin segwit',
         path: "m/84'/2'/0'",
         result: 'bip84',
