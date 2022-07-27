@@ -2103,7 +2103,7 @@ export default defineMessages({
         id: 'TR_FIRMWARE_INSTALLED',
     },
     TR_FIRMWARE_INSTALLED_TEXT: {
-        defaultMessage: 'This device has firmware {version} installed.',
+        defaultMessage: 'This device has firmware {version} ({type}) installed.',
         description: 'Text to display in case device has firmware installed but it is outdated',
         id: 'TR_FIRMWARE_INSTALLED_TEXT',
     },
@@ -2238,8 +2238,8 @@ export default defineMessages({
         id: 'TR_INSTALL',
     },
     TR_INSTALL_UNIVERSAL: {
-        defaultMessage: 'Install full-featured firmware',
-        description: 'Install button for universal firmware',
+        defaultMessage: 'Install Universal firmware',
+        description: 'Install button for Universal firmware',
         id: 'TR_INSTALL_UNIVERSAL',
     },
     TR_DO_NOT_DISCONNECT: {

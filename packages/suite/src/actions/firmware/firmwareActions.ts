@@ -101,15 +101,6 @@ const firmwareInstall =
 
             if (!toRelease) return;
 
-            const intermediary = model === 1 && !toRelease.isLatest;
-            if (intermediary) {
-                console.warn(
-                    'Cannot install latest firmware. Will install intermediary fw instead.',
-                );
-            } else {
-                console.warn(`Installing firmware ${toRelease.release.version}`);
-            }
-
             // update to same variant as is currently installed or to the regular one if device does not have any fw (new/wiped device),
             // unless the user wants to switch firmware type
             let toBitcoinOnlyFirmware = firmwareType === FirmwareType.BitcoinOnly;
@@ -117,13 +108,23 @@ const firmwareInstall =
                 toBitcoinOnlyFirmware = !prevDevice ? false : isBitcoinOnly(prevDevice);
             }
 
+            const intermediary = model === 1 && !toRelease.isLatest;
+
+            console.warn(
+                intermediary
+                    ? 'Cannot install latest firmware. Will install intermediary fw instead.'
+                    : `Installing ${
+                          toBitcoinOnlyFirmware ? FirmwareType.BitcoinOnly : FirmwareType.Universal
+                      } firmware ${toRelease.release.version}.`,
+            );
+
             analyticsPayload = {
                 toFwVersion: toRelease.release.version.join('.'),
                 toBtcOnly: toBitcoinOnlyFirmware,
             };
 
             // temporarily save target firmware type so that it can be displayed during installation and restart
-            // the value resets to undefined on firmwareActions.resetReducer() - doing it here would be too early because wee need to keep it during the restart
+            // the value resets to undefined on firmwareActions.resetReducer() - doing it here would be too early because we need to keep it during the restart
             if (firmwareType) {
                 dispatch({ type: FIRMWARE.SET_TARGET_TYPE, payload: firmwareType });
             }

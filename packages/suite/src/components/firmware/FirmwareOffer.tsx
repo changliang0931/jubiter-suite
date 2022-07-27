@@ -4,9 +4,9 @@ import { Button, Icon, Tooltip, variables } from '@trezor/components';
 import { GITHUB_FW_CHANGELOG_URL } from '@trezor/urls';
 import { Translation, TrezorLink } from '@suite-components';
 import {
+    getFwType,
     getFwUpdateVersion,
     getFwVersion,
-    isBitcoinOnly,
     parseFirmwareChangelog,
 } from '@suite-utils/device';
 import { useFirmware } from '@suite-hooks';
@@ -107,13 +107,10 @@ const FirmwareOffer = ({ device, customFirmware, targetFirmwareType }: Props) =>
     const parsedChangelog =
         !customFirmware && parseFirmwareChangelog(device.features, device.firmwareRelease);
 
-    const getFirmwareTypeName = (btcOnly: boolean) => (btcOnly ? 'Bitcoin-only ' : 'Universal ');
-
-    const previousFirmwareType =
-        device.firmware === 'unknown' ? '' : getFirmwareTypeName(isBitcoinOnly(device));
-    const nextFirmwareType = getFirmwareTypeName(
-        [targetFirmwareType, targetType].includes(FirmwareType.BitcoinOnly),
-    );
+    const previousFirmwareType = `${getFwType(device)} `;
+    const nextFirmwareType = [targetFirmwareType, targetType].includes(FirmwareType.BitcoinOnly)
+        ? `${FirmwareType.BitcoinOnly} `
+        : `${FirmwareType.Universal} `;
 
     return (
         <FwVersionWrapper>
