@@ -1,39 +1,40 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import * as suiteActions from '@suite-actions/suiteActions';
 import * as routerActions from '@suite-actions/routerActions';
 import { Translation } from '@suite-components';
 import { TextColumn } from '@suite-components/Settings';
 import { SettingsAnchor } from '@suite-constants/anchors';
 import { useActions, useDevice } from '@suite-hooks';
-import { useEnabledNetworks } from '@settings-hooks/useEnabledNetworks';
 import { isBitcoinOnly } from '@suite-utils/device';
 import { Button, Card } from '@trezor/components';
+
+const StyledCard = styled(Card)`
+    align-items: flex-start;
+    border-left: 10px solid ${props => props.theme.TYPE_GREEN};
+    box-shadow: 0 2px 5px 0 ${props => props.theme.BOX_SHADOW_BLACK_20};
+    flex-direction: row;
+    justify-content: space-between;
+`;
 
 const StyledButton = styled(Button)`
     display: inline;
 `;
 
 export const FirmwareTypeSuggestion = () => {
-    const { goto } = useActions({
+    const { goto, setFlag } = useActions({
         goto: routerActions.goto,
+        setFlag: suiteActions.setFlag,
     });
-    const { enabledNetworks } = useEnabledNetworks();
     const { device } = useDevice();
 
     const bitcoinOnlyFirmware = device && isBitcoinOnly(device);
-    const onlyBitcoinEnabled = enabledNetworks.every(coin =>
-        ['btc', 'regtest', 'test'].includes(coin),
-    );
-    const shouldDisplay =
-        device && (bitcoinOnlyFirmware || (!bitcoinOnlyFirmware && onlyBitcoinEnabled));
 
-    if (!shouldDisplay) {
-        return null;
-    }
+    const handleClose = () => setFlag('firmwareTypeBannerClosed', true);
 
     return (
-        <Card>
+        <StyledCard>
             <TextColumn
                 description={
                     <Translation
@@ -59,6 +60,9 @@ export const FirmwareTypeSuggestion = () => {
                     />
                 }
             />
-        </Card>
+            <Button variant="tertiary" onClick={handleClose}>
+                <Translation id="TR_GOT_IT" />
+            </Button>
+        </StyledCard>
     );
 };
