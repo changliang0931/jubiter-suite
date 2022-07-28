@@ -26,7 +26,7 @@ export const create = (
     deviceState: string,
     discoveryItem: DiscoveryItem,
     accountInfo: AccountInfo,
-): AccountAction => ({
+) => ({
     type: ACCOUNT.CREATE,
     payload: {
         deviceState,
@@ -37,8 +37,11 @@ export const create = (
         accountType: discoveryItem.accountType,
         symbol: discoveryItem.coin,
         empty: accountInfo.empty,
+        backendType: discoveryItem.backendType,
+        lastKnownState: discoveryItem.lastKnownState,
         visible:
             !accountInfo.empty ||
+            discoveryItem.accountType === 'coinjoin' ||
             (discoveryItem.accountType === 'normal' && discoveryItem.index === 0),
         balance: accountInfo.balance,
         availableBalance: accountInfo.availableBalance,
@@ -72,7 +75,7 @@ export const create = (
     },
 });
 
-export const update = (account: Account, accountInfo: AccountInfo): AccountAction => ({
+export const update = (account: Account, accountInfo: AccountInfo) => ({
     type: ACCOUNT.UPDATE,
     payload: {
         ...account,
@@ -96,7 +99,7 @@ export const update = (account: Account, accountInfo: AccountInfo): AccountActio
     },
 });
 
-export const updateAccount = (payload: Account): AccountAction => ({
+export const updateAccount = (payload: Account) => ({
     type: ACCOUNT.UPDATE,
     payload,
 });
