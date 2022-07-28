@@ -71,11 +71,11 @@ export const FirmwareInitial = ({
     const { goToNextStep, updateAnalytics } = useOnboarding();
 
     useEffect(() => {
-        // When user choses to install a new firmware update we will ask him/her to reconnect a device in bootloader mode.
+        // When the user choses to install a new firmware update we will ask him/her to reconnect a device in bootloader mode.
         // This prompt (to reconnect a device in bootloader mode) is shown in modal which is visually layer above the content.
-        // We are caching the device in order to preserve the background content (screen with fw update offer) when user
+        // We are caching the device in order to preserve the background content (screen with fw update offer) when the user
         // disconnects the device and reconnects it in bl mode.
-        // (Device in BL mode doesn't provide us all the details and we don't want any flickering or reacting in general while user is just following our instructions)
+        // (Device in BL mode doesn't provide us all the details and we don't want any flickering or reacting in general while the user is just following our instructions)
         if (liveDevice?.connected && liveDevice?.mode !== 'bootloader' && liveDevice.features) {
             // we never store state of the device while it is in bootloader, we want just "normal" mode
             setCachedDevice(liveDevice);
