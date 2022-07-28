@@ -1,6 +1,7 @@
 import { BrowserWindow, dialog } from 'electron';
 import { ipcMain } from './typed-electron';
 import { APP_SRC } from './libs/constants';
+import * as store from './libs/store';
 
 const HANG_WAIT = 30000;
 
@@ -33,10 +34,16 @@ export const hangDetect = (mainWindow: BrowserWindow): Promise<HandshakeResult> 
         timeout = setTimeout(timeoutCallback, HANG_WAIT);
         ipcMain.handleOnce('handshake/client', () => {
             clearTimeout(timeout);
+            const torSettings = store.getTorSettings();
+            const initialHandShakeClient = {
+                torSettings,
+            };
+
             // always resolve repeated handshakes from renderer (e.g. Ctrl+R)
-            ipcMain.handle('handshake/client', () => Promise.resolve());
+            ipcMain.handle('handshake/client', () => Promise.resolve(initialHandShakeClient));
             resolve('success');
-            return Promise.resolve();
+
+            return Promise.resolve(initialHandShakeClient);
         });
         logger.debug('init', `Load URL (${APP_SRC})`);
         mainWindow.loadURL(APP_SRC);

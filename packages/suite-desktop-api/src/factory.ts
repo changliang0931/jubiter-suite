@@ -63,6 +63,7 @@ export const factory = <R extends StrictIpcRenderer<any>>(ipcRenderer?: R): Desk
         // Client
         handshake: () => ipcRenderer.invoke('handshake/client'),
         loadModules: payload => ipcRenderer.invoke('handshake/load-modules', payload),
+        loadTor: payload => ipcRenderer.invoke('handshake/load-tor', payload),
 
         // Metadata
         metadataRead: options => {

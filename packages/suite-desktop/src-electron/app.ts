@@ -12,7 +12,7 @@ import { APP_NAME } from './libs/constants';
 import * as store from './libs/store';
 import { MIN_HEIGHT, MIN_WIDTH } from './libs/screen';
 import { getBuildInfo, getComputerInfo } from './libs/info';
-import { initModules } from './modules';
+import { initModules, initTorModule } from './modules';
 import { createInterceptor } from './libs/request-interceptor';
 import { hangDetect } from './hang-detect';
 import { createLogger } from './logger';
@@ -169,6 +169,20 @@ const init = async () => {
 
     // repeated during app lifecycle (e.g. Ctrl+R)
     ipcMain.handle('handshake/load-modules', (_, payload) => loadModulesResponse(payload));
+
+    const loadTor = await initTorModule({
+        mainWindow,
+        store,
+        interceptor,
+    });
+
+    // create handler for handshake/load-tor
+    const loadTorResponse = (clientData: HandshakeClient) =>
+        loadTor(clientData)
+            .then(() => ({ success: true }))
+            .catch(err => ({ success: false as const, error: err.message }));
+
+    ipcMain.handle('handshake/load-tor', (_, payload) => loadTorResponse(payload));
 
     // load and wait for handshake message from renderer
     const handshake = await hangDetect(mainWindow);

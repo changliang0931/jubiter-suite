@@ -23,7 +23,6 @@ const MODULES = [
     'http-receiver',
     'metadata',
     'bridge',
-    'tor',
     'custom-protocols',
     'auto-updater',
     'store',
@@ -45,6 +44,32 @@ type ModuleLoad = (payload: HandshakeClient) => any | Promise<any>;
 type ModuleInit = (dependencies: Dependencies) => ModuleLoad | void;
 
 export type Module = ModuleInit;
+
+export const initTorModule = async (dependencies: Dependencies) => {
+    const { logger } = global;
+
+    logger.info('modules', `Initializing tor module`);
+
+    try {
+        const m = await require(`./modules/tor`);
+        const initModule: Module = m.default;
+        const torModule = initModule(dependencies);
+        if (torModule) {
+            return async (handshake: HandshakeClient) => {
+                try {
+                    await torModule(handshake);
+                    logger.debug('modules', 'loaded tor');
+                    return ['tor'];
+                } catch (error) {
+                    logger.error('modules', `Couldn't load tor (${error.toString()})`);
+                    throw error;
+                }
+            };
+        }
+    } catch (err) {
+        logger.error('modules', `Couldn't initialize ${module} (${err.toString()})`);
+    }
+};
 
 export const initModules = async (dependencies: Dependencies) => {
     const { logger } = global;
