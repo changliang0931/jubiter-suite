@@ -1,5 +1,5 @@
 // origin: https://github.com/trezor/connect/blob/develop/src/js/popup/popup.js/
-
+import React from 'react';
 import {
     POPUP,
     UI_REQUEST,
@@ -24,6 +24,10 @@ import {
     showBridgeUpdateNotification,
     showBackupNotification,
 } from './view/notification';
+
+import { Transport } from './view/react/views/Transport';
+import { Passphrase } from './view/react/views/Passphrase';
+import { PassphraseOnDevice } from './view/react/views/PassphraseOnDevice';
 
 // browser built-in functionality to quickly and safely escape the string
 const escapeHtml = (payload: any) => {
@@ -68,6 +72,8 @@ const handleMessage = (event: MessageEvent<PopupEvent | UiEvent>) => {
 
     const message = parseMessage(data);
 
+    console.log('message.type', message.type);
+    console.log('message', message);
     switch (message.type) {
         case UI_REQUEST.LOADING:
             // case UI.REQUEST_UI_WINDOW :
@@ -79,7 +85,7 @@ const handleMessage = (event: MessageEvent<PopupEvent | UiEvent>) => {
             }
             break;
         case UI_REQUEST.TRANSPORT:
-            showView('transport');
+            showView(<Transport />);
             break;
         case UI_REQUEST.SELECT_DEVICE:
             view.selectDevice(message.payload);
@@ -144,11 +150,13 @@ const handleMessage = (event: MessageEvent<PopupEvent | UiEvent>) => {
         case UI_REQUEST.INVALID_PIN:
             showView('invalid-pin');
             break;
+        // comes first
         case UI_REQUEST.REQUEST_PASSPHRASE:
-            view.initPassphraseView(message.payload);
+            showView(<Passphrase {...message.payload} />);
             break;
+        // comes when user clicks "enter on device"
         case UI_REQUEST.REQUEST_PASSPHRASE_ON_DEVICE:
-            view.passphraseOnDeviceView(message.payload);
+            showView(<PassphraseOnDevice />);
             break;
         case UI_REQUEST.INVALID_PASSPHRASE:
             view.initInvalidPassphraseView(message.payload);
