@@ -11,6 +11,7 @@
     },
     "include": [".", "**/*.json"],
     "references": [
+        { "path": "../coinjoin" },
         { "path": "../components" },
         { "path": "../connect" },
         { "path": "../suite-analytics" },

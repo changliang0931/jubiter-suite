@@ -1,5 +1,5 @@
-import { httpRequest } from '../http';
-import { createServer, Server } from './server';
+import { httpRequest } from '../src/http';
+import { createServer, Server } from './utils/server';
 
 let server: Server | undefined;
 let baseUrl = 'http://localhost:8081/';

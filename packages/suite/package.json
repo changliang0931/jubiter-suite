@@ -26,6 +26,7 @@
         "@hookform/resolvers": "1.3.8",
         "@sentry/integrations": "6.17.2",
         "@sentry/minimal": "6.17.2",
+        "@trezor/coinjoin": "*",
         "@trezor/components": "*",
         "@trezor/connect": "9.0.0-beta.5",
         "@trezor/suite-analytics": "*",

@@ -1,18 +1,9 @@
 import TrezorConnect from '@trezor/connect';
+import { CoinjoinBackend as CJ, GetAccountInfoParams } from '@trezor/coinjoin';
 
-// NOTE: function below will be replaced by @trezor/coinjoin implementation
-type GetAccounInfo = {
-    descriptor: string;
-    lastKnownState: {
-        balance: string;
-        blockHash: string;
-    };
-    symbol: string;
-    onProgress: (state: any) => void;
-};
-
+// @ts-ignore
 const getCoinjoinAccountInfo = async (
-    { descriptor, symbol, onProgress, lastKnownState }: GetAccounInfo,
+    { descriptor, symbol, onProgress, lastKnownState }: GetAccountInfoParams,
     abortSignal: AbortSignal,
 ) => {
     const accountInfo = await TrezorConnect.getAccountInfo({
@@ -26,13 +17,13 @@ const getCoinjoinAccountInfo = async (
         return;
     }
 
-    if (lastKnownState.blockHash === '11') {
+    if (lastKnownState?.blockHash === '11') {
         return accountInfo.payload;
     }
 
     return new Promise<typeof accountInfo.payload>(resolve => {
         // Temporary simulate account discovery by block filters
-        let i = !lastKnownState.blockHash ? 0 : 70;
+        let i = !lastKnownState?.blockHash ? 0 : 70;
         let timeout: ReturnType<typeof setTimeout>;
         const tick = () => {
             i += 10;
@@ -74,9 +65,9 @@ export class CoinjoinBackend {
         });
     }
 
-    getAccountInfo(params: GetAccounInfo) {
+    getAccountInfo(params: GetAccountInfoParams) {
         this.abortController = new AbortController();
-        return getCoinjoinAccountInfo(params, this.abortController.signal);
+        return CJ.getAccountInfo({ ...params, abortSignal: this.abortController.signal });
     }
 
     cancel() {
