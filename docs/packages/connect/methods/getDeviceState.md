@@ -2,7 +2,7 @@
 
 Return information about a specific device. Devices without passphrase enabled return the same per instance.
 
-[Device state](commonParams.md) can be used in any method (key derivation or TX signing) to enforce the same passphrase on furhter operations.
+[Device state](commonParams.md) can be used in any method (key derivation or TX signing) to enforce the same passphrase on further operations.
 
 ```javascript
 const result = await TrezorConnect.getDeviceState(params);
@@ -20,7 +20,7 @@ Get the state of a device.
 const capturedDevice = await TrezorConnect.getDeviceState({
     device: {
         instance: 0, // identificator for wallet A
-        // `state: undefined` forces the passphrase prompt even if instance 0 is/was already using "some" pasphrase (let say empty). The Trezor forgets the current state, useful when dealing with multiple hidden wallets on one or more devices
+        // `state: undefined` forces the passphrase prompt even if instance 0 is/was already using "some" passphrase (lets say empty). The Trezor forgets the current state, useful when dealing with multiple hidden wallets on one or more devices
         // `state: "string" verifies state is valid, otherwise "invalid passphrase" error is returned
         state: undefined,
     },

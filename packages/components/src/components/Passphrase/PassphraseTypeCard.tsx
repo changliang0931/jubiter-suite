@@ -1,17 +1,33 @@
+// pull this component up to some share logic.
+
+// todo: reorganize imports
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useKeyPress } from '@trezor/react-utils';
-import { ANIMATION } from '@suite-config';
-import { setCaretPosition } from '@suite-utils/dom';
 import styled, { css } from 'styled-components';
+
+// ok
 import { Button, useTheme, variables, Input, Tooltip, Checkbox, Icon } from '@trezor/components';
-import { Translation } from '@suite-components/Translation';
-import { MAX_LENGTH } from '@suite-constants/inputs';
 import { countBytesInString } from '@trezor/utils';
-import { OpenGuideFromTooltip } from '@guide-components';
-import PasswordStrengthIndicator from '@suite-components/PasswordStrengthIndicator';
-import { useTranslation } from '@suite-hooks';
-import { isAndroid } from '@suite-utils/env';
+import { useKeyPress } from '@trezor/react-utils';
+
+// move to another package, shared package should not import from suite
+import { setCaretPosition } from '@trezor/suite/src/utils/suite/dom';
+import ANIMATION from '@trezor/suite/src/config/suite/animation';
+
+// moved
+import PasswordStrengthIndicator from './PasswordStrengthIndicator';
+
+// import { MAX_LENGTH } from '@suite-constants/inputs';
+const MAX_LENGTH = {
+    PASSPHRASE: 50,
+}; // probably should become PROP or be imported from some @trezor/constants/common package
+
+// todo: refactor these, translations, modal, etc
+// import { useTranslation } from '@suite-hooks';
+// import { OpenGuideFromTooltip } from '@guide-components';
+// import { Translation } from '@suite-components/Translation';
+// import { isAndroid } from '@trezor/suite/src/utils/suite/env';
 
 const Wrapper = styled.div<Pick<Props, 'type' | 'singleColModal'>>`
     display: flex;
@@ -151,6 +167,9 @@ const RetryButton = styled(Button)`
     margin-top: 16px;
 `;
 
+// todo: how about translations? pass translation component? pass translated string?
+const Translation = ({ id }: { id: string }) => <div>{id}</div>;
+
 type Props = {
     title?: React.ReactNode;
     description?: React.ReactNode;
@@ -165,9 +184,9 @@ type Props = {
 
 const DOT = '●';
 
-const PassphraseTypeCard = (props: Props) => {
+export const PassphraseTypeCard = (props: Props) => {
     const theme = useTheme();
-    const { translationString } = useTranslation();
+    // const { translationString } = useTranslation();
     const [value, setValue] = useState('');
     const [enabled, setEnabled] = useState(!props.authConfirmation);
     const [showPassword, setShowPassword] = useState(false);
@@ -284,15 +303,16 @@ const PassphraseTypeCard = (props: Props) => {
                             >
                                 {props.type === 'hidden' ? (
                                     <Tooltip
-                                        title={<Translation id="TR_WHAT_IS_PASSPHRASE" />}
-                                        guideAnchor={instance => (
-                                            <OpenGuideFromTooltip
-                                                dataTest="@tooltip/guideAnchor"
-                                                id="/security/passphrase.md"
-                                                instance={instance}
-                                            />
-                                        )}
-                                        content={<Translation id="TR_HIDDEN_WALLET_TOOLTIP" />}
+                                        // title={<Translation id="TR_WHAT_IS_PASSPHRASE" />}
+                                        // guideAnchor={instance => (
+                                        //     <OpenGuideFromTooltip
+                                        //         dataTest="@tooltip/guideAnchor"
+                                        //         id="/security/passphrase.md"
+                                        //         instance={instance}
+                                        //     />
+                                        // )}
+                                        // content={<Translation id="TR_HIDDEN_WALLET_TOOLTIP" />}
+                                        title={<div>"todo: pass tooltip as prop?"</div>}
                                         dashed
                                     >
                                         <>{props.title}</>
@@ -319,7 +339,8 @@ const PassphraseTypeCard = (props: Props) => {
                         <InputWrapper authConfirmation={props.authConfirmation}>
                             <PassphraseInput
                                 data-test="@passphrase/input"
-                                placeholder={translationString('TR_ENTER_PASSPHRASE')}
+                                // placeholder={translationString('TR_ENTER_PASSPHRASE')}
+                                placeholder="todo: pass as prop? translation?"
                                 onChange={onPassphraseChange}
                                 value={displayValue}
                                 innerRef={ref}
@@ -329,7 +350,8 @@ const PassphraseTypeCard = (props: Props) => {
                                 inputState={isTooLong ? 'error' : undefined}
                                 noTopLabel
                                 noError
-                                autoFocus={!isAndroid()}
+                                // autoFocus={!isAndroid()}
+                                autoFocus
                                 innerAddon={
                                     <Icon
                                         size={18}
@@ -412,5 +434,3 @@ const PassphraseTypeCard = (props: Props) => {
         </Wrapper>
     );
 };
-
-export default PassphraseTypeCard;

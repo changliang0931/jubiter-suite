@@ -1,6 +1,7 @@
 export { Pin } from './Pin';
 export { PinInvalid } from './PinInvalid';
 export { PinMismatch } from './PinMismatch';
+// todo: sharing with connect-popup
 export { Passphrase } from './Passphrase';
 export { PassphraseSource } from './PassphraseSource';
 export { PassphraseOnDevice } from './PassphraseOnDevice';
