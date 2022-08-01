@@ -20,7 +20,7 @@ const sentryMiddleware =
         const state = api.getState();
 
         switch (action.type) {
-            case SUITE.INIT:
+            case SUITE.READY:
                 setSentryContext('suite-ready', getSuiteReadyPayload(state));
                 break;
             case DEVICE.CONNECT: {
