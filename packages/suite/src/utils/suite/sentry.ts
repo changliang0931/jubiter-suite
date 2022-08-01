@@ -57,7 +57,7 @@ export const beforeSend: Options['beforeSend'] = event => {
 };
 
 export const beforeBreadcrumb: Options['beforeBreadcrumb'] = breadcrumb => {
-    // filter out analytics requests and image fetche
+    // filter out analytics requests and image fetches
     const isAnalytics =
         breadcrumb.category === 'fetch' &&
         breadcrumb.data?.url?.contains('data.trezor.io/suite/log');
