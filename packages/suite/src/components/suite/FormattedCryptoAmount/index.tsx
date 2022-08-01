@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FormattedNumber } from 'react-intl';
+
 import { HiddenPlaceholder, Sign } from '@suite-components';
 import { formatCurrencyAmount } from '@wallet-utils/formatCurrencyAmount';
 import { networkAmountToSatoshi } from '@wallet-utils/accountUtils';
@@ -7,6 +9,7 @@ import { isValuePositive, SignValue } from '@suite-components/Sign';
 import { useBitcoinAmountUnit } from '@wallet-hooks/useBitcoinAmountUnit';
 import { NETWORKS } from '@wallet-config';
 import { NetworkSymbol } from '@wallet-types';
+import { useSelector } from '@suite-hooks/useSelector';
 
 const Container = styled.span`
     max-width: 100%;
@@ -41,6 +44,8 @@ export const FormattedCryptoAmount = ({
     'data-test': dataTest,
     className,
 }: FormattedCryptoAmountProps) => {
+    const locale = useSelector(state => state.suite.settings.language);
+
     const { areSatsDisplayed } = useBitcoinAmountUnit();
 
     if (!value) {
@@ -52,15 +57,13 @@ export const FormattedCryptoAmount = ({
 
     const areSatsSupported = !!networkFeatures?.includes('amount-unit');
 
-    let formattedValue = value;
+    let formattedValue = Number(value);
     let formattedSymbol = symbol?.toUpperCase();
 
     const isSatoshis = areSatsSupported && areSatsDisplayed;
 
     if (isSatoshis) {
-        formattedValue = formatCurrencyAmount(
-            Number(networkAmountToSatoshi(String(value), symbol as NetworkSymbol)),
-        ) as string;
+        formattedValue = Number(networkAmountToSatoshi(String(value), symbol as NetworkSymbol));
 
         formattedSymbol = isTestnet ? `sat ${symbol?.toUpperCase()}` : 'sat';
     }
@@ -68,7 +71,9 @@ export const FormattedCryptoAmount = ({
     if (isRawString) {
         return (
             <>
-                {`${signValue ? `${isValuePositive(signValue) ? '+' : '-'}` : ''} ${formattedValue}
+                {`${
+                    signValue ? `${isValuePositive(signValue) ? '+' : '-'}` : ''
+                } ${formatCurrencyAmount(formattedValue, locale)}
                 ${formattedSymbol}`}
             </>
         );
@@ -78,7 +83,9 @@ export const FormattedCryptoAmount = ({
         <Container className={className}>
             {signValue && <Sign value={signValue} />}
 
-            <Value data-test={dataTest}>{formattedValue}</Value>
+            <Value data-test={dataTest}>
+                <FormattedNumber value={formattedValue} maximumFractionDigits={20} />
+            </Value>
 
             {symbol && <Symbol>&nbsp;{formattedSymbol}</Symbol>}
         </Container>
