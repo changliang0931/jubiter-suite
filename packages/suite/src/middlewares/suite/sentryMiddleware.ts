@@ -4,7 +4,7 @@ import { MiddlewareAPI } from 'redux';
 import { DEVICE } from '@trezor/connect';
 
 import { SUITE, ROUTER } from '@suite-actions/constants';
-import { getFwVersion, getBootloaderVersion } from '@suite-utils/device';
+import { getFwVersion, getBootloaderVersion, isBitcoinOnly } from '@suite-utils/device';
 import { getSuiteReadyPayload } from '@suite-utils/analytics';
 import { setSentryContext, setSentryTag } from '@suite-utils/sentry';
 
@@ -31,6 +31,7 @@ const sentryMiddleware =
                 setSentryContext(deviceContextName, {
                     mode,
                     firmware: getFwVersion(action.payload),
+                    isBitcoinOnly: isBitcoinOnly(action.payload),
                     bootloader: getBootloaderVersion(action.payload),
                     model: features.model,
                 });
