@@ -4468,7 +4468,8 @@ export default defineMessages({
     },
     TR_SWITCH_FIRMWARE_TYPE_DESCRIPTION: {
         id: 'TR_SWITCH_FIRMWARE_TYPE_DESCRIPTION',
-        defaultMessage: 'You are going to install a different type of firmware.',
+        defaultMessage:
+            'Bitcoin-only firmware is a light-weight option for users only interested in Bitcoin. Universal firmware enables all supported coins and features. Do you wish to switch firmware type?',
     },
     TR_EXPERIMENTAL_FEATURES: {
         id: 'TR_EXPERIMENTAL_FEATURES',
