@@ -106,11 +106,9 @@ const FirmwareOffer = ({ device, customFirmware, targetFirmwareType }: Props) =>
 
     const parsedChangelog =
         !customFirmware && parseFirmwareChangelog(device.features, device.firmwareRelease);
-
     const previousFirmwareType = `${getFwType(device)} `;
-    const nextFirmwareType = [targetFirmwareType, targetType].includes(FirmwareType.BitcoinOnly)
-        ? `${FirmwareType.BitcoinOnly} `
-        : `${FirmwareType.Universal} `;
+    const nextFirmwareType = targetFirmwareType || targetType;
+    const formattedNextFirmwareType = nextFirmwareType ? `${nextFirmwareType} ` : '';
 
     return (
         <FwVersionWrapper>
@@ -181,13 +179,13 @@ const FirmwareOffer = ({ device, customFirmware, targetFirmwareType }: Props) =>
                             placement="top"
                         >
                             <Version new data-test="@firmware/offer-version/new">
-                                {nextFirmwareType}
+                                {formattedNextFirmwareType}
                                 {newVersion}
                             </Version>
                         </Tooltip>
                     ) : (
                         <Version new>
-                            {!customFirmware && nextFirmwareType}
+                            {formattedNextFirmwareType}
                             {newVersion}
                         </Version>
                     )}
