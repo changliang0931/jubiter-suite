@@ -21,13 +21,15 @@ export const SettingsDebug = () => (
         <SettingsSection title="Debug">
             <GithubIssue />
             {!isWeb() && <WipeData />}
-            <ThrowTestingError />
         </SettingsSection>
         <SettingsSection title="Invity">
             <InvityApi />
         </SettingsSection>
         <SettingsSection title="OAuth">
             <OAuthApi />
+        </SettingsSection>
+        <SettingsSection title="Testing">
+            <ThrowTestingError />
         </SettingsSection>
     </SettingsLayout>
 );
