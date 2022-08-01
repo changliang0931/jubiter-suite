@@ -7,13 +7,14 @@ import { AppState, Action, Dispatch } from '@suite-types';
 
 const router = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) => (action: Action) => {
     const { router } = api.getState();
+    const { initialRun } = api.getState().suite.flags;
 
     switch (action.type) {
         case ROUTER.LOCATION_CHANGE:
             /**
              * Store back route for navigation when closing the settings.
              * Exclude settings routes – we want to close the settings and not just switch the settigns tab...
-             * Exculde foreground apps – to prevent going back to modals and other unexpected states.
+             * Exclude foreground apps – to prevent going back to modals and other unexpected states.
              */
             if (router.app !== 'settings' && !router.route?.isForegroundApp) {
                 return next({
@@ -21,7 +22,10 @@ const router = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) => (
                     payload: {
                         ...action.payload,
                         settingsBackRoute: {
-                            name: router.route?.name ?? 'suite-index',
+                            name:
+                                router.route?.name ?? initialRun
+                                    ? 'onboarding-index'
+                                    : 'suite-index',
                             params: router.params,
                         },
                     },

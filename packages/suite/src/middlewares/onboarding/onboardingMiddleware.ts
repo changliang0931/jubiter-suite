@@ -22,7 +22,11 @@ const onboardingMiddleware =
             // here middleware detects that onboarding app is disposed, do following:
             // 1. reset onboarding reducer to initialState
             // 2. set initialRun field in suite reducer to false (do not redirect to onboarding on first load next time)
-            if (action.payload !== 'onboarding' && prevApp === 'onboarding') {
+            if (
+                action.payload !== 'onboarding' &&
+                action.payload !== 'settings' &&
+                prevApp === 'onboarding'
+            ) {
                 api.dispatch(suiteActions.initialRunCompleted());
                 api.dispatch(onboardingActions.resetOnboarding());
             }
