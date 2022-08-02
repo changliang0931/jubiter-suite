@@ -37,8 +37,7 @@ const init: Module = () => {
     return () => {
         if (loaded) return;
         loaded = true;
-        // TODO intentionally not awaited to mimic previous behavior, resolve later!
-        load();
+        return load();
     };
 };
 
