@@ -72,12 +72,7 @@ export const init = async (root: HTMLElement) => {
     const store = initStore(preloadAction);
 
     const handshakeResponse = await desktopApi.handshake();
-    if (!handshakeResponse.success) {
-        render(<ErrorScreen error={handshakeResponse.error} />, root);
-        return;
-    }
-
-    const { torSettings } = handshakeResponse.payload;
+    const { torSettings } = handshakeResponse;
 
     render(<TorLoadingScreen torSettings={torSettings} />, root);
 

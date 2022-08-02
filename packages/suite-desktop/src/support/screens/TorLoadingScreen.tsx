@@ -198,6 +198,8 @@ export const TorLoadingScreen = ({ callback, torSettings }: TorLoadingScreenProp
     // Before the actual loading starts we want to display generic loading,
     // to avoid displaying TOR related screen when TOR is disable.
     if (!torSettings.running) {
+        // If the user does not want to run Tor we donot need this listener.
+        desktopApi.removeAllListeners('tor/bootstrap');
         return <LoadingScreen />;
     }
 

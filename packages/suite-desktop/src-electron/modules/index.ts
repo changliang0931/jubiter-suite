@@ -59,7 +59,7 @@ export const initTorModule = async (dependencies: Dependencies) => {
                 try {
                     await torModule(handshake);
                     logger.debug('modules', 'loaded tor');
-                    return ['tor'];
+                    return;
                 } catch (error) {
                     logger.error('modules', `Couldn't load tor (${error.toString()})`);
                     throw error;

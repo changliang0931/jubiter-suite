@@ -34,6 +34,15 @@ export type HandshakeEvent =
           message: string;
       };
 
+export type HandsakeTorLoad =
+    | {
+          success: true;
+      }
+    | {
+          success: false;
+          error?: string;
+      };
+
 export type HandshakeClient = any;
 
 export type InitialHandShakeClient = {

@@ -177,10 +177,15 @@ const init = async () => {
     });
 
     // create handler for handshake/load-tor
-    const loadTorResponse = (clientData: HandshakeClient) =>
-        loadTor(clientData)
-            .then(() => ({ success: true }))
+    const loadTorResponse = (clientData: HandshakeClient) => {
+        if (!loadTor) {
+            return Promise.resolve({ success: false, error: 'Tor failed to load' });
+        }
+
+        return loadTor(clientData)
+            .then(() => ({ success: true, test: 'test' }))
             .catch(err => ({ success: false as const, error: err.message }));
+    };
 
     ipcMain.handle('handshake/load-tor', (_, payload) => loadTorResponse(payload));
 
