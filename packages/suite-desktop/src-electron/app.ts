@@ -183,7 +183,7 @@ const init = async () => {
         }
 
         return loadTor(clientData)
-            .then(() => ({ success: true, test: 'test' }))
+            .then(() => ({ success: true }))
             .catch(err => ({ success: false as const, error: err.message }));
     };
 

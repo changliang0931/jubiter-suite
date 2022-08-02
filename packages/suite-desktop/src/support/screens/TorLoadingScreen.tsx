@@ -69,7 +69,8 @@ const ProgressWrapper = styled.div`
     align-items: center;
     background: #e8e8e8;
     border-radius: 8px;
-    width: 470px;
+    width: 100%;
+    min-height: 45px;
 `;
 
 const ProgressMessage = styled.div`
